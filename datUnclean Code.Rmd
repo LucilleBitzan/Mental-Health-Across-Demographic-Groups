@@ -1,0 +1,18 @@
+---
+title: "datUnclean Code"
+author: "Lucille Bitzan"
+date: '2022-11-17'
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+datUnclean<- adult21 %>% select(ANXFREQ_A,DEPFREQ_A,PHSTAT_A,HISPALLP_A,MARSTAT_A,ORIENT_A)
+```
+
+```{r}
+write.csv(datUnclean,file="datUnclean.cvs",col.names = TRUE)
+```
