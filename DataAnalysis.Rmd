@@ -1,0 +1,73 @@
+---
+title: "Data Analysis"
+author: "Gina Yi"
+date: '2022-11-20'
+output: html_document
+---
+Libraries Used:
+```{r}
+library("tidyverse")
+```
+
+Data Cleaning:
+Responses to remove:
+"ANXFREQ_A": 7-9
+"DEPFREQ_A": 7-9
+"PHSTAT_A': 7-9 
+"HISPALLP_A":97-99 (None of these values exist in the data set)
+"MARSTAT_A": 9
+"ORIENT_A": 7-9
+```{r}
+datUnclean <- read.csv("~/Desktop/PSY4960-Fall2022/PSY4960Project/datUnclean.csv")
+dat <- datUnclean
+colnames(dat) <- c("x","anxiety","depression","physicalHealth","raceEthnicity", "marital", "sexuality")
+dat$anxiety <- ifelse(dat$anxiety >=7, NA, dat$anxiety)
+dat$depression <- ifelse(dat$depression >=7, NA, dat$depression)
+dat$physicalHealth <- ifelse(dat$physicalHealth >= 7, NA, dat$physicalHealth)
+dat$marital <-  ifelse(dat$marital == 9, NA, dat$marital)
+dat$sexuality <- ifelse(dat$sexuality >= 7, NA, dat$sexuality)
+```
+Relevel and Reverse Coding 
+```{r}
+physicalHealth1 <- as.ordered(dat$physicalHealth)
+dat$physicalHealthRev <- as.factor(dat$physicalHealth)
+levels(dat$physicalHealthRev) <- rev(levels(dat$physicalHealthRev))
+dat$depressionRev <- as.factor(dat$depression)
+levels(dat$depressionRev) <- rev(levels(dat$depressionRev))
+```
+
+
+Physical Health Hypotheses:
+Individuals with poorer physical health statuses will experience depression more frequently.
+```{r}
+cor.test(dat$depression, dat$physicalHealth, method = "spearman", alterantive = "greater")
+ggplot(data = dat, aes(physicalHealth, depression)) + geom_point()
+```
+
+Individuals with poorer physical health statuses will experience anxiety more frequently.
+```{r}
+cor.test(dat$physicalHealth, dat$anxiety, method = "spearman", alternative = "greater")
+```
+
+Race/Ethnicity Hypotheses:
+Individuals of different races will experience different frequencies of depression.
+```{r}
+
+```
+
+Individuals of different races will experience different frequencies of anxiety.
+```{r}
+
+```
+
+Marital status Hypotheses:
+Individuals who are married will experience lower levels of of depression
+```{r}
+
+```
+
+Individuals who are married will experience lower levels of of anxiety
+```{r}
+
+```
+
