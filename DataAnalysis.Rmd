@@ -6,7 +6,9 @@ output: html_document
 ---
 Libraries Used:
 ```{r}
+library("ggplot2")
 library("tidyverse")
+library("car")
 ```
 
 Data Cleaning:
@@ -27,21 +29,33 @@ dat$physicalHealth <- ifelse(dat$physicalHealth >= 7, NA, dat$physicalHealth)
 dat$marital <-  ifelse(dat$marital == 9, NA, dat$marital)
 dat$sexuality <- ifelse(dat$sexuality >= 7, NA, dat$sexuality)
 ```
+
 Relevel and Reverse Coding 
 ```{r}
-physicalHealth1 <- as.ordered(dat$physicalHealth)
-dat$physicalHealthRev <- as.factor(dat$physicalHealth)
-levels(dat$physicalHealthRev) <- rev(levels(dat$physicalHealthRev))
-dat$depressionRev <- as.factor(dat$depression)
-levels(dat$depressionRev) <- rev(levels(dat$depressionRev))
+dat$anxietyRev<-recode(dat$anxiety, "1=5;2=4;3=3;4=2;5=1")
+dat$depressionRev<-recode(dat$depression, "1=5;2=4;3=3;4=2;5=1")
+dat$physicalHealthRev<-recode(dat$physicalHealth, "1=5;2=4;3=3;4=2;5=1")
+```
+
+```{r}
+"Currently Unused"
+#dat$physicalHealthRev <- as.ordered(dat$physicalHealth)
+#levels(dat$physicalHealthRev) <- rev(levels(dat$physicalHealthRev))
+
+#dat$depressionRev <- as.ordered(dat$depression)
+#levels(dat$depressionRev) <- rev(levels(dat$depressionRev))
+
+#dat$anxietyRev<- as.ordered(dat$anxiety)
+#levels(dat$anxietyRev)<- rev(levels(dat$anxietyRev))
+
 ```
 
 
 Physical Health Hypotheses:
 Individuals with poorer physical health statuses will experience depression more frequently.
 ```{r}
-cor.test(dat$depression, dat$physicalHealth, method = "spearman", alterantive = "greater")
-ggplot(data = dat, aes(physicalHealth, depression)) + geom_point()
+cor.test(dat$depressionRev, dat$physicalHealthRev, method = "spearman", alterantive = "greater")
+ggplot(data = dat, aes(physicalHealthRev, depressionRev)) + geom_point()
 ```
 
 Individuals with poorer physical health statuses will experience anxiety more frequently.
@@ -65,11 +79,13 @@ ggplot(dat, aes(raceEthnicity, anxietyRev)) + geom_point()
 Marital status Hypotheses:
 Individuals who are married will experience lower levels of of depression
 ```{r}
-
+kruskal.test(depressionRev ~ marital, data= dat)
+ggplot(dat, aes(marital, depressionRev)) + geom_point()
 ```
 
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
-
+kruskal.test(anxietyRev ~ marital, data= dat)
+ggplot(dat, aes(marital, anxietyRev)) + geom_point()
 ```
 
