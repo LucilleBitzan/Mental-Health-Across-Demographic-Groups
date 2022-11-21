@@ -52,12 +52,14 @@ cor.test(dat$physicalHealth, dat$anxiety, method = "spearman", alternative = "gr
 Race/Ethnicity Hypotheses:
 Individuals of different races will experience different frequencies of depression.
 ```{r}
-
+kruskal.test(depressionRev ~ raceEthnicity, data= dat)
+ggplot(dat, aes(raceEthnicity, depressionRev)) + geom_point()
 ```
 
 Individuals of different races will experience different frequencies of anxiety.
 ```{r}
-
+kruskal.test(anxietyRev ~ raceEthnicity, data= dat)
+ggplot(dat, aes(raceEthnicity, anxietyRev)) + geom_point()
 ```
 
 Marital status Hypotheses:
