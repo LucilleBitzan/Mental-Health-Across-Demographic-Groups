@@ -37,7 +37,7 @@ dat$depressionRev<-recode(dat$depression, "1=5;2=4;3=3;4=2;5=1")
 dat$physicalHealthRev<-recode(dat$physicalHealth, "1=5;2=4;3=3;4=2;5=1")
 levels(dat$raceEthnicity)<-c("Hispanic", "Non-Hispanic White only", "Non-Hispanic Black/African American only", "Non-Hispanic Asian only", "Non-Hispanic AIAN only","AIAN and any other group","Other single and multiple races")
 dat$marital<-as.factor(dat$marital)
-levels(dat$marital)<-c("Married, spouse present","Married, spouse not present","Married, spouse unknown","Widowed","Divorced","Separated","Never married","Living with partner")
+levels(dat$marital)<-c("Married","Married","Married","Widowed","Divorced","Separated","Never married","Living with partner")
 ```
 
 ```{r}
@@ -59,6 +59,7 @@ Individuals with poorer physical health statuses will experience depression more
 ```{r}
 cor.test(dat$depressionRev, dat$physicalHealthRev, method = "spearman", alterantive = "greater")
 ggplot(data = dat, aes(physicalHealthRev, depressionRev)) + geom_point()
+ggplot(data = dat,aes(as.ordered(physicalHealthRev),as.integer(depressionRev)))+geom_boxplot()
 ```
 
 Individuals with poorer physical health statuses will experience anxiety more frequently.
@@ -70,25 +71,25 @@ Race/Ethnicity Hypotheses:
 Individuals of different races will experience different frequencies of depression.
 ```{r}
 kruskal.test(depressionRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(depressionRev,color=raceEthnicity,fill=raceEthnicity)) + geom_density()
+ggplot(dat, aes(raceEthnicity, depressionRev)) + geom_point()
 ```
 
 Individuals of different races will experience different frequencies of anxiety.
 ```{r}
 kruskal.test(anxietyRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(anxietyRev,color=raceEthnicity,fill=raceEthnicity)) + geom_density()
+ggplot(dat, aes(raceEthnicity, anxietyRev)) + geom_point()
 ```
 
 Marital status Hypotheses:
 Individuals who are married will experience lower levels of of depression
 ```{r}
 kruskal.test(depressionRev ~ marital, data= dat)
-ggplot(dat, aes(depressionRev,color=marital,fill=marital)) + geom_density()
+ggplot(dat, aes(depressionRev,color=marital,fill=marital)) + geom_density(alpha=.5)
 ```
 
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
 kruskal.test(anxietyRev ~ marital, data= dat)
-ggplot(dat, aes(anxietyRev,color=marital,fill=marital)) + geom_density()
+ggplot(dat, aes(anxietyRev,color=marital,fill=marital)) + geom_density(alpha=.5) 
 ```
 
