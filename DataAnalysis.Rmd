@@ -70,13 +70,13 @@ Race/Ethnicity Hypotheses:
 Individuals of different races will experience different frequencies of depression.
 ```{r}
 kruskal.test(depressionRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(raceEthnicity, depressionRev)) + geom_point()
+ggplot(dat, aes(depressionRev,color=raceEthnicity,fill=raceEthnicity)) + geom_density()
 ```
 
 Individuals of different races will experience different frequencies of anxiety.
 ```{r}
 kruskal.test(anxietyRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(raceEthnicity, anxietyRev)) + geom_point()
+ggplot(dat, aes(anxietyRev,color=raceEthnicity,fill=raceEthnicity)) + geom_density()
 ```
 
 Marital status Hypotheses:
