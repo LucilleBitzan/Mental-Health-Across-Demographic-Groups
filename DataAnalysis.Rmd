@@ -32,12 +32,15 @@ dat$sexuality <- ifelse(dat$sexuality >= 7, NA, dat$sexuality)
 
 Relevel and Reverse Coding 
 ```{r}
-dat$anxietyRev<-recode(dat$anxiety, "1=5;2=4;3=3;4=2;5=1")
-dat$depressionRev<-recode(dat$depression, "1=5;2=4;3=3;4=2;5=1")
-dat$physicalHealthRev<-recode(dat$physicalHealth, "1=5;2=4;3=3;4=2;5=1")
+dat$anxietyRev<-car::recode(dat$anxiety, "1=5;2=4;3=3;4=2;5=1")
+dat$depressionRev<-car::recode(dat$depression, "1=5;2=4;3=3;4=2;5=1")
+dat$physicalHealthRev<-car::recode(dat$physicalHealth, "1=5;2=4;3=3;4=2;5=1")
+dat$raceEthnicity<-as.factor(dat$raceEthnicity)
 levels(dat$raceEthnicity)<-c("Hispanic", "Non-Hispanic White only", "Non-Hispanic Black/African American only", "Non-Hispanic Asian only", "Non-Hispanic AIAN only","AIAN and any other group","Other single and multiple races")
 dat$marital<-as.factor(dat$marital)
 levels(dat$marital)<-c("Married","Married","Married","Widowed","Divorced","Separated","Never married","Living with partner")
+dat$physicalHealthRev<-as.factor(dat$physicalHealthRev)
+levels(dat$physicalHealthRev)<-c("Poor","Fair","Good","Very Good","Excellent")
 ```
 
 ```{r}
@@ -58,38 +61,38 @@ Physical Health Hypotheses:
 Individuals with poorer physical health statuses will experience depression more frequently.
 ```{r}
 cor.test(dat$depressionRev, dat$physicalHealthRev, method = "spearman", alterantive = "greater")
-ggplot(data = dat, aes(physicalHealthRev, depressionRev)) + geom_point()
-ggplot(data = dat,aes(as.ordered(physicalHealthRev),as.integer(depressionRev)))+geom_boxplot()
+ggplot(dat, aes(depressionRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge())
 ```
 
 Individuals with poorer physical health statuses will experience anxiety more frequently.
 ```{r}
 cor.test(dat$physicalHealth, dat$anxiety, method = "spearman", alternative = "greater")
+ggplot(dat, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge())
 ```
 
 Race/Ethnicity Hypotheses:
 Individuals of different races will experience different frequencies of depression.
 ```{r}
 kruskal.test(depressionRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(raceEthnicity, depressionRev)) + geom_point()
+ggplot(dat, aes(depressionRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5,position = position_dodge())
 ```
 
 Individuals of different races will experience different frequencies of anxiety.
 ```{r}
 kruskal.test(anxietyRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(raceEthnicity, anxietyRev)) + geom_point()
+ggplot(dat, aes(anxietyRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5,position = position_dodge())
 ```
 
 Marital status Hypotheses:
 Individuals who are married will experience lower levels of of depression
 ```{r}
 kruskal.test(depressionRev ~ marital, data= dat)
-ggplot(dat, aes(depressionRev,color=marital,fill=marital)) + geom_density(alpha=.5)
+ggplot(dat, aes(depressionRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())
 ```
 
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
 kruskal.test(anxietyRev ~ marital, data= dat)
-ggplot(dat, aes(anxietyRev,color=marital,fill=marital)) + geom_density(alpha=.5) 
+ggplot(dat, aes(anxietyRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())
 ```
 
