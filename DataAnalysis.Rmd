@@ -35,6 +35,9 @@ Relevel and Reverse Coding
 dat$anxietyRev<-recode(dat$anxiety, "1=5;2=4;3=3;4=2;5=1")
 dat$depressionRev<-recode(dat$depression, "1=5;2=4;3=3;4=2;5=1")
 dat$physicalHealthRev<-recode(dat$physicalHealth, "1=5;2=4;3=3;4=2;5=1")
+levels(dat$raceEthnicity)<-c("Hispanic", "Non-Hispanic White only", "Non-Hispanic Black/African American only", "Non-Hispanic Asian only", "Non-Hispanic AIAN only","AIAN and any other group","Other single and multiple races")
+dat$marital<-as.factor(dat$marital)
+levels(dat$marital)<-c("Married, spouse present","Married, spouse not present","Married, spouse unknown","Widowed","Divorced","Separated","Never married","Living with partner")
 ```
 
 ```{r}
@@ -80,12 +83,12 @@ Marital status Hypotheses:
 Individuals who are married will experience lower levels of of depression
 ```{r}
 kruskal.test(depressionRev ~ marital, data= dat)
-ggplot(dat, aes(marital, depressionRev)) + geom_point()
+ggplot(dat, aes(depressionRev,color=marital,fill=marital)) + geom_density()
 ```
 
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
 kruskal.test(anxietyRev ~ marital, data= dat)
-ggplot(dat, aes(marital, anxietyRev)) + geom_point()
+ggplot(dat, aes(anxietyRev,color=marital,fill=marital)) + geom_density()
 ```
 
