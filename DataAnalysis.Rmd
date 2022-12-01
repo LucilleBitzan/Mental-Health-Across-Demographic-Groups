@@ -39,9 +39,9 @@ dat$raceEthnicity<-as.factor(dat$raceEthnicity)
 levels(dat$raceEthnicity)<-c("Hispanic", "Non-Hispanic White only", "Non-Hispanic Black/African American only", "Non-Hispanic Asian only", "Non-Hispanic AIAN only","AIAN and any other group","Other single and multiple races")
 dat$marital<-as.factor(dat$marital)
 levels(dat$marital)<-c("Married","Married","Married","Widowed","Divorced","Separated","Never married","Living with partner")
-#dat$physicalHealthRev<-as.factor(dat$physicalHealthRev)
-#levels(dat$physicalHealthRev)<-c("Poor","Fair","Good","Very Good","Excellent")
-#giving us silly knitting errors
+# dat$physicalHealthRev<-as.factor(dat$physicalHealthRev)
+# levels(dat$physicalHealthRev)<-c("Poor","Fair","Good","Very Good","Excellent")
+
 ```
 
 ```{r}
@@ -61,14 +61,26 @@ levels(dat$marital)<-c("Married","Married","Married","Widowed","Divorced","Separ
 Physical Health Hypotheses:
 Individuals with poorer physical health statuses will experience depression more frequently.
 ```{r}
+darPhysStatDep <- dat %>% select("physicalHealthRev", "depressionRev")
+darPhysStatDep <- na.omit(darPhysStatDep)
+
+darPhysStatAnx <- dat %>% select("physicalHealthRev", "anxietyRev")
+darPhysStatAnx <- na.omit(darPhysStatAnx)
+```
+
+```{r}
 cor.test(dat$depressionRev, dat$physicalHealthRev, method = "spearman", alterantive = "greater")
-ggplot(dat, aes(depressionRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge())
+# ggplot(dat, aes(depressionRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Depression Score") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health")
+
+ggplot(darPhysStatDep, aes(depressionRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Depression Scores") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health") + scale_fill_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent")) + scale_color_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent"))
 ```
 
 Individuals with poorer physical health statuses will experience anxiety more frequently.
 ```{r}
-cor.test(dat$physicalHealth, dat$anxiety, method = "spearman", alternative = "greater")
-ggplot(dat, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge())
+cor.test(dat$physicalHealthRev, dat$anxiety, method = "spearman", alternative = "greater")
+# ggplot(dat, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge())
+
+ggplot(darPhysStatAnx, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Anxiety Scores") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health") + scale_fill_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent")) + scale_color_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent"))
 ```
 
 
@@ -101,8 +113,10 @@ kruskal.test(depressionRev ~ marital, data= datMarStatDep)
 ggplot(datMarStatDep, aes(depressionRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Depression Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")
 ```
 
+
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
 kruskal.test(anxietyRev ~ marital, data= datMarStatAnx)
 ggplot(datMarStatAnx, aes(anxietyRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Anxiety Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")
 ```
+
