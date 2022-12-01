@@ -69,7 +69,7 @@ darPhysStatAnx <- na.omit(darPhysStatAnx)
 ```
 
 ```{r}
-cor.test(dat$depressionRev, dat$physicalHealthRev, method = "spearman", alterantive = "greater")
+cor.test(dat$depressionRev, dat$physicalHealthRev, method = "spearman", alternative = "greater")
 # ggplot(dat, aes(depressionRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Depression Score") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health")
 
 ggplot(darPhysStatDep, aes(depressionRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Depression Scores") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health") + scale_fill_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent")) + scale_color_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent"))
