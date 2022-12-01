@@ -20,7 +20,7 @@ Responses to remove:
 "MARSTAT_A": 9
 "ORIENT_A": 7-9
 ```{r}
-datUnclean <- read.csv("~/Desktop/PSY4960-Fall2022/PSY4960Project/datUnclean.csv")
+datUnclean <- read.csv("~/Desktop/4960 Project/datUnclean.cvs")
 dat <- datUnclean
 colnames(dat) <- c("x","anxiety","depression","physicalHealth","raceEthnicity", "marital", "sexuality")
 dat$anxiety <- ifelse(dat$anxiety >=7, NA, dat$anxiety)
@@ -41,6 +41,7 @@ dat$marital<-as.factor(dat$marital)
 levels(dat$marital)<-c("Married","Married","Married","Widowed","Divorced","Separated","Never married","Living with partner")
 # dat$physicalHealthRev<-as.factor(dat$physicalHealthRev)
 # levels(dat$physicalHealthRev)<-c("Poor","Fair","Good","Very Good","Excellent")
+
 ```
 
 ```{r}
@@ -82,31 +83,40 @@ cor.test(dat$physicalHealthRev, dat$anxiety, method = "spearman", alternative = 
 ggplot(darPhysStatAnx, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Anxiety Scores") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health") + scale_fill_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent")) + scale_color_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent"))
 ```
 
+
 Race/Ethnicity Hypotheses:
 Individuals of different races will experience different frequencies of depression.
 ```{r}
 kruskal.test(depressionRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(depressionRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5,position = position_dodge())
+ggplot(dat, aes(depressionRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5, position = position_dodge())+ylab("Responses")+xlab("Depression Score")+ labs(color= "Racial/Ethnic Groups", fill="Racial/Ethnic Groups")
 ```
 
 Individuals of different races will experience different frequencies of anxiety.
 ```{r}
 kruskal.test(anxietyRev ~ raceEthnicity, data= dat)
-ggplot(dat, aes(anxietyRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5,position = position_dodge())
+ggplot(dat, aes(anxietyRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5, position = position_dodge())+ylab("Responses")+xlab("Anxiety Score")+ labs(color= "Racial/Ethnic Groups", fill="Racial/Ethnic Groups")
 ```
+
 
 Marital status Hypotheses:
 Individuals who are married will experience lower levels of of depression
 ```{r}
-kruskal.test(depressionRev ~ marital, data= dat)
-ggplot(dat, aes(depressionRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())
+datMarStatAnx<-dat %>% select("marital","anxietyRev")
+datMarStatDep<- dat %>% select("marital","depressionRev")
+datMarStatAnx<-na.omit(datMarStatAnx)
+datMarStatDep<- na.omit(datMarStatDep)
 ```
+
+
+```{r}
+kruskal.test(depressionRev ~ marital, data= datMarStatDep)
+ggplot(datMarStatDep, aes(depressionRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Depression Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")
+```
+
 
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
-kruskal.test(anxietyRev ~ marital, data= dat)
-ggplot(dat, aes(anxietyRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())
-```
-
+kruskal.test(anxietyRev ~ marital, data= datMarStatAnx)
+ggplot(datMarStatAnx, aes(anxietyRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Anxiety Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")
 ```
 
