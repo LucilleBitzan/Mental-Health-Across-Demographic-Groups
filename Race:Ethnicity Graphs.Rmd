@@ -1,0 +1,13 @@
+#Race/Ethnicity Hypotheses:
+
+Individuals of different races will experience different frequencies of depression.
+```{r}
+kruskal.test(depressionRev ~ raceEthnicity, data= dat)
+ggplot(dat, aes(depressionRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5, position = position_dodge())+ylab("Responses")+xlab("Depression Score")+ labs(color= "Racial/Ethnic Groups", fill="Racial/Ethnic Groups")
+```
+
+Individuals of different races will experience different frequencies of anxiety.
+```{r}
+kruskal.test(anxietyRev ~ raceEthnicity, data= dat)
+ggplot(dat, aes(anxietyRev,color=raceEthnicity,fill=raceEthnicity)) + geom_bar(alpha=.5, position = position_dodge())+ylab("Responses")+xlab("Anxiety Score")+ labs(color= "Racial/Ethnic Groups", fill="Racial/Ethnic Groups")
+```
