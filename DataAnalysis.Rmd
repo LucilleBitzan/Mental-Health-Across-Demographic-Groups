@@ -9,6 +9,8 @@ Libraries Used:
 library("ggplot2")
 library("tidyverse")
 library("car")
+library("jtools")
+library("FSA")
 ```
 
 Data Cleaning:
@@ -77,7 +79,7 @@ ggplot(darPhysStatDep, aes(depressionRev,color=as.factor(physicalHealthRev),fill
 
 Individuals with poorer physical health statuses will experience anxiety more frequently.
 ```{r}
-cor.test(dat$physicalHealthRev, dat$anxiety, method = "spearman", alternative = "greater")
+cor.test(dat$physicalHealthRev, dat$anxietyRev, method = "spearman", alternative = "greater")
 # ggplot(dat, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge())
 
 ggplot(darPhysStatAnx, aes(anxietyRev,color=as.factor(physicalHealthRev),fill=as.factor(physicalHealthRev))) + geom_bar(alpha=.5,position = position_dodge()) + xlab("Anxiety Scores") + ylab("Responses") + labs(color = "Physical Health", fill = "Physical Health") + scale_fill_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent")) + scale_color_discrete(labels = c("Poor", "Fair", "Good", "Very Good", "Excellent"))
@@ -110,13 +112,19 @@ datMarStatDep<- na.omit(datMarStatDep)
 
 ```{r}
 kruskal.test(depressionRev ~ marital, data= datMarStatDep)
-ggplot(datMarStatDep, aes(depressionRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Depression Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")
+ggplot(datMarStatDep, aes(depressionRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Depression Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")+theme_apa()
+datMarStatDep$depressionRev<-as.numeric(datMarStatDep$depressionRev)
+datMarStatDep$marital<-as.factor(datMarStatDep$marital)
+dunnTest(datMarStatDep$depressionRev~datMarStatDep$marital,two.sided = FALSE)
 ```
 
 
 Individuals who are married will experience lower levels of of anxiety
 ```{r}
 kruskal.test(anxietyRev ~ marital, data= datMarStatAnx)
-ggplot(datMarStatAnx, aes(anxietyRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Anxiety Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")
+ggplot(datMarStatAnx, aes(anxietyRev,color=marital,fill=marital)) + geom_bar(alpha=.5,position = position_dodge())+xlab("Anxiety Score")+ ylab("Responses")+labs(color="Marital Status",fill="Marital Status")+theme_apa()
+datMarStatAnx$anxietyRev<-as.numeric(datMarStatAnx$anxietyRev)
+datMarStatAnx$marital<-as.factor(datMarStatAnx$marital)
+dunnTest(datMarStatAnx$anxietyRev~datMarStatAnx$marital,two.sided = FALSE)
 ```
 
